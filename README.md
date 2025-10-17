@@ -31,6 +31,7 @@ There's a database schema with some sample data set up for you. Feel free to ext
 ### Database Schema
 
 The database includes the following main tables:
+
 - **balance_changes**: Track all balance modifications
 - **bets**: Individual bet records
 - **bookies**: Betting providers
@@ -52,6 +53,7 @@ Build a REST API using Python (framework of your choice - Flask, FastAPI, Django
 ### Frontend
 
 Build a simple frontend application (in React, use TypeScript) that covers the following:
+
 - Ability to view all relevant tables with information presented suitably
 - Different category of data broken up into sections (eg bets are separate from events)
 - Ability to view, add, edit and delete information
@@ -61,17 +63,19 @@ Build a simple frontend application (in React, use TypeScript) that covers the f
 ### Technical Requirements
 
 1. **Code Quality**
+
    - Clean, well-organized code
    - Proper error handling
    - Input validation
    - Security best practices (eg SQL injection prevention)
 
 2. **API Design**
+
    - RESTful conventions
    - Proper HTTP status codes
    - JSON request/response format
 
-4. **Stretch goals**
+3. **Stretch goals**
    - Unit tests for your API endpoints
    - API documentation (OpenAPI/Swagger bonus)
    - Containerize the entire application
@@ -81,8 +85,8 @@ Build a simple frontend application (in React, use TypeScript) that covers the f
 
 1. **Functionality**: Does the application meet the requirements?
 2. **Code Quality**: Is the code clean, maintainable, and well-structured?
-4. **API Design**: Is the API well-designed?
-6. **UI/UX**: Is the frontend intuitive and user-friendly?
+3. **API Design**: Is the API well-designed?
+4. **UI/UX**: Is the frontend intuitive and user-friendly?
 
 ## Submission
 
@@ -93,3 +97,43 @@ You can send us your submission as a single archive that we can extract and run.
 This assignment should take approximately 2-4 hours to complete the core requirements. Bonus features are optional and can be implemented if time permits.
 
 Good luck!
+
+---
+
+## How to Run (Dev)
+
+1. Ensure Docker is installed.
+2. From project root, run:
+   ```bash
+   docker-compose up -d --build
+   ```
+3. Services:
+   - API: `http://localhost:8000` (docs at `/docs`)
+   - Frontend: `http://localhost:3000`
+   - Adminer: `http://localhost:8080` (server `postgres`)
+4. API requires header: `X-API-Key: dev-key`.
+
+## Environment
+
+The `docker-compose.yml` sets sensible defaults:
+
+- `POSTGRES_*` for DB connection
+- `API_KEY` used by backend
+- `VITE_API_URL` and `VITE_API_KEY` used by frontend
+
+## API Endpoints (selected)
+
+- `GET /health` simple health check
+- `GET /api/sports`, `POST /api/sports`, `DELETE /api/sports/{name}`
+- `GET/POST/PUT/DELETE /api/teams`
+- `GET/POST/PUT/DELETE /api/competitions`
+- `GET/POST/PUT/DELETE /api/events`
+- `GET/POST/PUT/DELETE /api/results`
+- `GET/POST/PUT/DELETE /api/customers`
+- `GET/POST/PUT/DELETE /api/bookies`
+- `GET/POST/PUT/DELETE /api/bets`
+- `GET/POST /api/balance_changes`
+- `GET /api/audit`
+- `GET /api/customer_stats`
+
+Note: database triggers enforce business rules and maintain audit logs.

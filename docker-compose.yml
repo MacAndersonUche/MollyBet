@@ -27,5 +27,36 @@ services:
     environment:
       ADMINER_DEFAULT_SERVER: postgres
 
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: betting-platform-backend
+    environment:
+      POSTGRES_USER: analyst_user
+      POSTGRES_PASSWORD: analyst_password
+      POSTGRES_DB: analyst_platform
+      POSTGRES_HOST: postgres
+      POSTGRES_PORT: 5432
+      API_KEY: dev-key
+    ports:
+      - "8000:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: frontend/Dockerfile
+    container_name: betting-platform-frontend
+    environment:
+      - VITE_API_URL=http://localhost:8000/api
+      - VITE_API_KEY=dev-key
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
 volumes:
   postgres_data:
