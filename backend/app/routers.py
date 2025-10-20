@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException, Query, Response
 
 from .db import db
 from .models import (
@@ -59,7 +59,7 @@ async def create_sport(sport: Sport) -> Sport:
     return sport
 
 
-@router.delete("/sports/{name}", status_code=204)
+@router.delete("/sports/{name}", status_code=200, response_class=Response)
 async def delete_sport(name: str) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM sports WHERE name=$1", name)
@@ -113,7 +113,7 @@ async def update_team(team_id: int, payload: TeamCreate) -> Team:
     return Team(**dict(row))
 
 
-@router.delete("/teams/{team_id}", status_code=204)
+@router.delete("/teams/{team_id}", status_code=200, response_class=Response)
 async def delete_team(team_id: int) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM teams WHERE id=$1", team_id)
@@ -172,7 +172,7 @@ async def update_competition(competition_id: int, payload: CompetitionCreate) ->
     return Competition(**dict(row))
 
 
-@router.delete("/competitions/{competition_id}", status_code=204)
+@router.delete("/competitions/{competition_id}", status_code=200, response_class=Response)
 async def delete_competition(competition_id: int) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM competitions WHERE id=$1", competition_id)
@@ -230,7 +230,7 @@ async def update_event(event_id: int, payload: EventCreate) -> Event:
     return Event(**dict(row))
 
 
-@router.delete("/events/{event_id}", status_code=204)
+@router.delete("/events/{event_id}", status_code=200, response_class=Response)
 async def delete_event(event_id: int) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM events WHERE id=$1", event_id)
@@ -280,7 +280,7 @@ async def update_result(event_id: int, payload: ResultCreate) -> Result:
     return Result(**dict(row))
 
 
-@router.delete("/results/{event_id}", status_code=204)
+@router.delete("/results/{event_id}", status_code=200, response_class=Response)
 async def delete_result(event_id: int) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM results WHERE event_id=$1", event_id)
@@ -353,7 +353,7 @@ async def update_customer(customer_id: int, payload: CustomerCreate) -> Customer
     return Customer(**data)
 
 
-@router.delete("/customers/{customer_id}", status_code=204)
+@router.delete("/customers/{customer_id}", status_code=200, response_class=Response)
 async def delete_customer(customer_id: int) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM customers WHERE id=$1", customer_id)
@@ -396,7 +396,7 @@ async def update_bookie(name: str, payload: BookieCreate) -> Bookie:
     return Bookie(**payload.model_dump())
 
 
-@router.delete("/bookies/{name}", status_code=204)
+@router.delete("/bookies/{name}", status_code=200, response_class=Response)
 async def delete_bookie(name: str) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM bookies WHERE name=$1", name)
@@ -486,7 +486,7 @@ async def update_bet(bet_id: int, payload: BetCreate) -> Bet:
     return Bet(**data)
 
 
-@router.delete("/bets/{bet_id}", status_code=204)
+@router.delete("/bets/{bet_id}", status_code=200, response_class=Response)
 async def delete_bet(bet_id: int) -> None:
     async for conn in db.acquire():
         await conn.execute("DELETE FROM bets WHERE id=$1", bet_id)

@@ -100,7 +100,9 @@ Good luck!
 
 ---
 
-## How to Run (Dev)
+## How to Run
+
+### Option 1: Docker (Full Stack with Database)
 
 1. Ensure Docker is installed.
 2. From project root, run:
@@ -112,6 +114,130 @@ Good luck!
    - Frontend: `http://localhost:3000`
    - Adminer: `http://localhost:8080` (server `postgres`)
 4. API requires header: `X-API-Key: dev-key`.
+
+### Option 2: Local Development (No Database)
+
+#### Backend Setup
+
+1. **Create virtual environment:**
+
+   ```bash
+   cd backend
+   python -m venv .venv
+   ```
+
+2. **Activate virtual environment:**
+
+   - Windows:
+     ```powershell
+     .\.venv\Scripts\Activate.ps1
+     ```
+
+   ````
+   - macOS/Linux:
+     ```bash
+   source .venv/bin/activate
+   ````
+
+3. **Install dependencies:**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+   **Note:** If you encounter build errors for `asyncpg` on Windows, you can skip it for local development:
+
+   ```bash
+   pip install fastapi==0.115.0 uvicorn[standard]==0.30.6 pydantic==2.9.2 python-dotenv==1.0.1 pytest==8.3.3 httpx==0.27.2 pytest-asyncio==0.24.0
+   ```
+
+4. **Run the backend:**
+
+   ```bash
+   # Set environment variables
+   $env:ENABLE_DB_EVENTS="0"  # Windows PowerShell
+   $env:API_KEY="dev-key"
+
+   # Start the server
+   uvicorn app.main:app --host 127.0.0.1 --port 8000 --reload
+   ```
+
+5. **Test the backend:**
+
+   ```bash
+   # Run tests
+   $env:PYTHONPATH=(Get-Location).Path  # Windows PowerShell
+   $env:ENABLE_DB_EVENTS="0"
+   $env:API_KEY="dev-key"
+   pytest -q
+
+   # Or test manually
+   curl http://127.0.0.1:8000/health
+   ```
+
+#### Frontend Setup
+
+1. **Install dependencies:**
+
+   ```bash
+   cd frontend
+   npm install
+   ```
+
+2. **Run the frontend:**
+
+   ```bash
+   npm run dev
+   ```
+
+3. **Access the application:**
+   - Frontend: `http://localhost:5173`
+   - Backend API: `http://localhost:8000`
+   - API Documentation: `http://localhost:8000/docs`
+
+#### Environment Variables
+
+For local development, set these environment variables:
+
+**Backend:**
+
+- `ENABLE_DB_EVENTS=0` - Disables database connection (for local dev without DB)
+- `API_KEY=dev-key` - API key for authentication
+
+**Frontend:**
+
+- `VITE_API_URL=http://localhost:8000` - Backend API URL
+- `VITE_API_KEY=dev-key` - API key for backend requests
+
+### Option 3: Local Development with Database
+
+If you want to run with a real database locally:
+
+1. **Start PostgreSQL:**
+
+   ```bash
+   docker-compose up -d postgres adminer
+   ```
+
+2. **Install asyncpg (requires C++ build tools on Windows):**
+
+   ```bash
+   cd backend
+   .\.venv\Scripts\pip install asyncpg==0.29.0
+   ```
+
+3. **Set environment variables:**
+
+   ```bash
+   $env:ENABLE_DB_EVENTS="1"
+   $env:API_KEY="dev-key"
+   $env:POSTGRES_HOST="localhost"
+   $env:POSTGRES_USER="analyst_user"
+   $env:POSTGRES_PASSWORD="analyst_password"
+   $env:POSTGRES_DB="analyst_platform"
+   ```
+
+4. **Run backend and frontend as described above**
 
 ## Environment
 
