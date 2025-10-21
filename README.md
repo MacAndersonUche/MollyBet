@@ -263,3 +263,30 @@ The `docker-compose.yml` sets sensible defaults:
 - `GET /api/customer_stats`
 
 Note: database triggers enforce business rules and maintain audit logs.
+
+## Troubleshooting
+
+### TypeScript Error: Property 'env' does not exist on type 'ImportMeta'
+
+If you encounter this error during Docker build or local development:
+
+```
+error TS2339: Property 'env' does not exist on type 'ImportMeta'.
+```
+
+**Solution:** Ensure the file `frontend/src/vite-env.d.ts` exists with the following content:
+
+```typescript
+/// <reference types="vite/client" />
+
+interface ImportMetaEnv {
+  readonly VITE_API_URL?: string;
+  readonly VITE_API_KEY?: string;
+}
+
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+```
+
+This file provides TypeScript with type definitions for Vite's environment variables accessed via `import.meta.env`.
